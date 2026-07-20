@@ -18,8 +18,10 @@ const tasks = [
   }
 ];
 
+let nextid = 4;
 
 const app = express();
+app.use(express.json());
 const port = 3000;
 app.get('/', (req, res) => {
     res.json({ "name": "Task API", "version": "1.0", "endpoints": ["/tasks"] });
@@ -43,6 +45,25 @@ app.get('/tasks/:id', (req, res) => {
         });
     }
     res.json(task);
+})
+
+app.post('/tasks', (req, res) => {
+    const {title} = req.body;
+
+    if(!title){
+        return res.status(404).json({
+            error:"title is required"
+        });
+    }
+
+    const newtask = {
+        id: nextid++,
+        title: title.trim(),
+        done:false
+    };
+
+    tasks.push(newtask);
+    res.status(201).json(newtask);
 })
 
 app.listen(port, () => {
