@@ -1,4 +1,7 @@
 import express from 'express';
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./openapi.json" with { type: "json" };
+
 
 const tasks = [
   {
@@ -23,6 +26,7 @@ let nextid = 4;
 const app = express();
 app.use(express.json());
 const port = 3000;
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/', (req, res) => {
     res.json({ "name": "Task API", "version": "1.0", "endpoints": ["/tasks"] });
 })
